@@ -27,9 +27,9 @@ app.get("/api/movies/:id",(req,res)=>{
     .catch((e)=>res.status(500).json(e.message));
 })
 app.post("/api/movies",(req,res)=>{
-    const {Title,Director,Year,Rating,Poster}=req.body;
-    const safeData=[Title,Director,Year,Rating,Poster];
-    pool .query('INSERT INTO movies (Title,Director,Year,Rating,Poster) VALUES ($1,$2,$3,$4,$5)',safeData)
+    const {title,director,year,rating,poster}=req.body;
+    const safeData=[title,director,year,rating,poster];
+    pool .query('INSERT INTO movies (title,director,year,rating,poster) VALUES ($1,$2,$3,$4,$5) RETURNING *',safeData)
     .then(({rows})=>{
         res.json(rows[0])
     })
@@ -39,10 +39,10 @@ app.post("/api/movies",(req,res)=>{
 app.put("/api/movies/:id",(req,res)=>{
     const {id}=req.params;
     
-    const  {Title,Director,Year,Rating,Poster}=req.body;
-    const safeData=[Title,Director,Year,Rating,Poster,id];
+    const  {title,director,year,rating,poster}=req.body;
+    const safeData=[title,director,year,rating,poster,id];
     
-    pool .query('UPDATE movies SET Title=$1,Director=$2,Year=$3,Rating=$4,Poster=$5 WHERE id=$6 RETURNING *',safeData)
+    pool .query('UPDATE movies SET title=$1,director=$2,year=$3,rating=$4,poster=$5 WHERE id=$6 RETURNING *',safeData)
 
 .then(({rows})=>[
     res.status(201).json(rows[0])
@@ -62,6 +62,8 @@ app.delete("/api/movies/:id",(req,res)=>{
     .catch((e)=>res.status(500).json({msg:e.message}))
 
 })
+
+
 
 
 
